@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="ja">
+<head><meta name="description" content="ぺろっぺは、あなたの心のなかにいる、もうひとりの自分。ぺろっぺとごましおの世界、キャラクター、あそびば、グッズのご紹介。">
+<meta property="og:title" content="ぺろっぺ peroppe"><meta property="og:description" content="あなたの心のなかにいる、もうひとりの自分。ぺろっぺの公式サイト。"><meta property="og:type" content="website"><meta property="og:image" content="img/pero-balloon.png">
+<link rel="icon" href="img/pero.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ぺろっぺと感情たち</title>
+<script src="https://cdn.jsdelivr.net/npm/budoux@0.9.3/bundle/budoux-ja.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<style>
+/* Layout: トップと同じ「空 → アイボリーの地面 → 草」。感情の輪を主役に、図と短い文で大人向けに説明する読みものページ。単一テーマで設計。 */
+:root{
+  --yellow:#FFDA4D;
+  --ivory:#FBF8D8; --grass:#94BC72; --navy:#191C5D; --ink:#232323; --white:#FFFFFF; --soon:#E4E4E0; --beak:#F2701E;
+  --f-en:"Fredoka","Zen Maru Gothic",system-ui,sans-serif;
+  --f-jp:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans",sans-serif;
+  --gutter:clamp(16px,4vw,48px);
+  color-scheme:light;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:auto}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--f-jp);font-weight:500;font-size:clamp(15px,1.2vw,17px);line-height:2;letter-spacing:.05em;word-break:auto-phrase;line-break:strict;overflow-x:hidden}
+h1,h2,h3{margin:0;color:var(--navy);font-weight:900;line-height:1.45;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+img{display:block;max-width:100%;-webkit-user-drag:none;user-select:none}
+:focus-visible{outline:3px solid var(--navy);outline-offset:4px;border-radius:10px}
+.wrap{width:min(1040px,100%);margin-inline:auto;padding-inline:var(--gutter)}
+.center{text-align:center}
+
+/* header */
+.hd{position:sticky;top:0;z-index:50;padding-top:env(safe-area-inset-top,0px);background:rgba(255,255,255,.5);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);border-bottom:1px solid rgba(255,255,255,.6);box-shadow:0 4px 20px rgba(25,28,93,.06)}
+.hd-in{display:flex;justify-content:space-between;align-items:center;padding:10px var(--gutter)}
+.hd .logo img{height:22px;width:auto}
+/* メニュー（トップと同じ） */
+.gnav{display:flex;gap:clamp(14px,2.2vw,32px);list-style:none;margin:0;padding:0}
+.gnav a{color:var(--navy);font-family:var(--f-en);font-weight:700;font-size:15px;letter-spacing:.14em;text-decoration:none;display:inline-flex}
+.gnav a span{display:inline-block;transform-origin:50% 100%}
+.gnav a:hover span{animation:wobble .4s ease-out}
+.gnav a:hover span:nth-child(2){animation-delay:.03s}.gnav a:hover span:nth-child(3){animation-delay:.06s}.gnav a:hover span:nth-child(4){animation-delay:.09s}.gnav a:hover span:nth-child(5){animation-delay:.12s}.gnav a:hover span:nth-child(6){animation-delay:.15s}.gnav a:hover span:nth-child(7){animation-delay:.18s}.gnav a:hover span:nth-child(8){animation-delay:.21s}.gnav a:hover span:nth-child(9){animation-delay:.24s}
+@keyframes wobble{30%{transform:rotate(-18deg)}60%{transform:rotate(14deg)}}
+.menu-btn{display:none;border:0;background:var(--navy);width:36px;height:36px;border-radius:50%;padding:0;place-items:center;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.menu-btn i{display:block;width:16px;height:2px;border-radius:2px;background:#fff;box-shadow:0 -5px 0 #fff,0 5px 0 #fff}
+.sp-menu{position:fixed;inset:0;z-index:60;background:var(--yellow);display:grid;place-items:center;padding:24px}
+.sp-menu ul{list-style:none;margin:0;padding:0;display:grid;gap:22px;text-align:center}
+.sp-menu a{font-family:var(--f-en);font-weight:700;font-size:28px;letter-spacing:.14em;text-decoration:none}
+.sp-menu .close{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:16px;border:0;background:var(--ink);color:#fff;width:48px;height:48px;border-radius:50%;font-size:22px}
+@media (max-width:767px){.gnav{display:none}.menu-btn{display:grid}}
+.hd .logo img{height:22px;width:auto}
+.back{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-en);font-weight:700;font-size:13px;letter-spacing:.12em;text-decoration:none;color:var(--navy);background:var(--ivory);padding:6px 16px;border-radius:99px;box-shadow:0 3px 0 rgba(25,28,93,.1)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding-bottom:clamp(40px,6vw,80px)}
+.sky{position:absolute;inset:0 0 auto 0;height:420px;background:linear-gradient(#FFFFFF,rgba(255,255,255,.7) 55%,rgba(251,248,216,0));pointer-events:none}
+.hero-in{position:relative;display:grid;justify-items:center;gap:0;text-align:center;padding-top:clamp(24px,4vw,56px)}
+.hero h1{margin-top:14px}
+.hero .lead{margin-top:clamp(20px,2.4vw,28px)}
+.eyebrow{font-family:var(--f-en);font-weight:700;font-size:13px;letter-spacing:.24em;color:var(--beak)}
+.hero h1{font-size:clamp(28px,4.6vw,52px)}
+.hero .lead{font-size:clamp(15px,1.3vw,17px);max-width:34em;color:#555;line-height:2.1}
+.orbit{position:relative;width:min(440px,86vw);aspect-ratio:1;margin-top:clamp(36px,5vw,64px)}
+.orbit .halo{position:absolute;inset:8%;border-radius:50%;background:radial-gradient(closest-side,#fff 0 60%,rgba(255,255,255,0) 100%)}
+.orbit .me{position:absolute;left:50%;top:50%;height:30%;transform:translate(-50%,-50%)}
+.orbit .ring{position:absolute;inset:0;animation:spin 60s linear infinite}
+.orbit .ring span{position:absolute;width:12%;aspect-ratio:1;transform:translate(-50%,-50%);display:grid;place-items:center}
+.orbit .ring img{max-width:100%;max-height:100%;width:auto;height:auto;animation:counter 60s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes counter{from{rotate:0deg}to{rotate:-360deg}}
+.me-label{position:absolute;left:50%;top:calc(50% + 17%);transform:translateX(-50%);font-size:12px;font-weight:700;color:var(--navy);letter-spacing:.12em;white-space:nowrap}
+.orbit-tag{font-size:12px;font-weight:700;background:var(--white);border:2px solid var(--navy);color:var(--navy);padding:0 14px;border-radius:99px;white-space:nowrap;margin-top:-6px;font-size:12px;font-weight:700;background:var(--white);border:2px solid var(--navy);color:var(--navy);padding:0 12px;border-radius:99px;white-space:nowrap}
+
+.sec{padding-block:clamp(64px,9vw,120px)}
+.sh{display:grid;justify-items:center;gap:6px;text-align:center;margin-bottom:clamp(36px,5vw,60px)}
+.sh .en{font-family:var(--f-en);font-weight:700;letter-spacing:.1em;font-size:clamp(32px,4.6vw,60px);color:var(--navy);line-height:1;margin-right:-.1em}
+.sh h2{font-size:clamp(22px,2.6vw,30px);margin-top:6px}
+.sh .tap-hint{margin-top:4px;font-size:13px;font-weight:700;color:var(--navy);background:var(--white);padding:4px 16px;border-radius:99px}
+.sh p{max-width:36em;margin-top:14px;font-size:clamp(14px,1.15vw,16px);color:#555;line-height:2.05}
+
+/* map: あなたの心 ⇄ ぺろっぺの世界 */
+.map{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(12px,2vw,24px);align-items:stretch}
+.side{background:var(--white);border-radius:32px;padding:clamp(24px,3vw,36px) clamp(18px,2.6vw,30px);display:grid;gap:10px;align-content:start;justify-items:center;text-align:center;min-width:0}
+.side h3{font-size:clamp(18px,1.9vw,22px);margin-top:10px}
+.side p{font-size:14px;color:#555;line-height:1.95}
+.side .pic{height:170px;display:grid;place-items:center;position:relative;width:100%}
+.mid{display:grid;place-items:center;font-family:var(--f-en);font-weight:700;color:var(--navy);font-size:28px}
+.rows{display:grid;gap:10px;margin-top:clamp(20px,3vw,32px)}
+.row{display:grid;grid-template-columns:1fr 44px 1fr;align-items:center;gap:8px;background:var(--white);border-radius:99px;padding:10px 22px;text-align:center}
+.row b{font-weight:900;color:var(--navy)}
+.row .ar{font-family:var(--f-en);font-weight:700;color:var(--beak)}
+.row small{display:block;font-size:12px;color:#6B6B6B;line-height:1.5}
+@media (max-width:720px){.map{grid-template-columns:1fr}.mid{transform:rotate(90deg)}.row{border-radius:24px;padding:12px 16px}}
+.person{width:96px;height:140px;position:relative}
+.person::before{content:"";position:absolute;left:50%;top:0;width:44px;height:44px;margin-left:-22px;border-radius:50%;border:3px solid var(--navy);background:var(--ivory)}
+.person::after{content:"";position:absolute;left:50%;top:48px;width:84px;height:90px;margin-left:-42px;border-radius:42px 42px 18px 18px;border:3px solid var(--navy);background:var(--ivory)}
+.blob{position:absolute;width:14px;height:14px;border-radius:50%;z-index:2;animation:bubble 3s ease-in-out infinite}
+@keyframes bubble{50%{transform:translateY(-8px) scale(1.15)}}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2.4vw,28px)}
+.step{background:var(--white);border-radius:32px;padding:26px 20px 30px;display:grid;justify-items:center;align-content:start;gap:10px;text-align:center;min-width:0}
+.step .no{font-family:var(--f-en);font-weight:700;font-size:15px;color:var(--white);background:var(--navy);width:36px;height:36px;border-radius:50%;display:grid;place-items:center}
+.step .pic{height:126px;margin-top:6px;display:flex;align-items:flex-end;justify-content:center;gap:6px}
+.step .pair{height:auto;max-width:none}
+/* 2枚のペア画像は同じ倍率（元画像の0.45倍）で表示 */
+.step h3{font-size:clamp(17px,1.7vw,20px);margin-top:8px}
+.step p{font-size:14px;line-height:1.95;color:#555}
+@media (max-width:760px){.steps{grid-template-columns:1fr}}
+
+/* wheel */
+.wheel-wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(20px,4vw,48px);align-items:center}
+.wheel{position:relative;width:min(480px,100%);aspect-ratio:1;justify-self:center}
+.wheel svg{width:100%;height:100%;overflow:visible}
+.petal{cursor:pointer;outline:none;transition:transform .35s cubic-bezier(.3,1.6,.5,1),opacity .3s;-webkit-tap-highlight-color:transparent}
+.petal:focus{outline:none}
+.petal path{stroke:var(--white);stroke-width:2;transition:stroke .2s}
+.petal:hover{opacity:1!important}
+.wheel.picked .petal:not(.on){opacity:.5}
+.petal.on path{stroke:var(--navy);stroke-width:3.5}
+.petal:focus-visible path{stroke:var(--navy);stroke-width:3.5;stroke-dasharray:6 4}
+.wheel svg,.wheel{-webkit-tap-highlight-color:transparent}
+.petal image{transition:transform .4s}
+.petal.on image{animation:wiggle .6s ease-in-out}
+@keyframes wiggle{30%{transform:rotate(-8deg)}60%{transform:rotate(6deg)}}
+.wheel .core-glow{position:absolute;left:50%;top:50%;width:30%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,#fff 0 55%,rgba(255,255,255,.85) 70%,rgba(255,255,255,0) 100%);filter:blur(4px);pointer-events:none}
+.wheel .core{position:absolute;left:50%;top:50%;width:15%;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 4px 6px rgba(25,28,93,.15))}
+.card{align-content:start;background:var(--white);border-radius:32px;padding:clamp(22px,3vw,34px);display:grid;gap:14px;min-width:0;text-align:center;justify-items:center}
+.card .sil{height:84px;width:auto}
+.card h3{font-size:clamp(24px,2.8vw,32px)}
+.card h3 small{display:block;font-family:var(--f-en);font-size:12px;letter-spacing:.2em;color:#6B6B6B;font-weight:600}
+.levels{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap}
+.levels span{border-radius:99px;padding:2px 12px;font-size:13px;font-weight:700}
+.levels i{font-style:normal;color:#9A9A9A;font-size:12px}
+.role{font-size:15px;line-height:1.9}
+.rel{display:grid;gap:12px;width:100%}
+.rel-box{background:var(--ivory);border-radius:20px;padding:12px 14px 14px;display:grid;gap:8px;justify-items:center}
+.rel-lbl{font-size:12px;font-weight:900;color:var(--navy);letter-spacing:.08em}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--white);border-radius:99px;padding:3px 12px 3px 6px;font-size:14px;font-weight:700;white-space:nowrap}
+.chip img{height:24px;width:auto}
+.mix{display:grid;gap:8px}
+.eq{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-family:var(--f-en);font-weight:700;color:var(--navy)}
+.eq .res{background:var(--navy);color:#fff;border-radius:99px;padding:2px 14px;font-family:var(--f-jp);font-size:14px}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px;text-align:left;width:100%;max-width:340px;margin:0}
+.meta dt{font-weight:900;color:var(--navy)}
+.meta dd{margin:0}
+.hint{font-size:13px;color:#6B6B6B}
+@media (max-width:820px){.wheel-wrap{grid-template-columns:1fr}}
+
+/* message */
+.msg{text-align:center;display:grid;justify-items:center;gap:28px}
+.msg > p:not(.quote):not(.note){color:#555;line-height:2.1}
+.quote{font-size:clamp(20px,2.8vw,32px);font-weight:900;color:var(--navy);line-height:1.8}
+.space{display:flex;align-items:flex-end;justify-content:center;gap:clamp(24px,6vw,72px);margin-top:8px}
+.space .gap{font-family:var(--f-en);font-weight:700;color:var(--beak);font-size:13px;letter-spacing:.14em;border-bottom:2px dashed var(--beak);padding:0 12px 4px;align-self:center}
+.btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--navy);color:#fff;text-decoration:none;font-weight:700;padding:14px 28px;border-radius:99px;box-shadow:0 5px 0 rgba(0,0,0,.2);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 8px 0 rgba(0,0,0,.2)}
+.btn.ghost{background:var(--white);color:var(--navy)}
+.note{font-size:12px;color:#6B6B6B;margin-top:clamp(40px,6vw,64px);text-align:center}
+
+.grass{display:block;width:100%;height:clamp(44px,6vw,84px);transform:scaleY(-1)}
+footer{background:var(--grass);color:var(--navy);text-align:center;padding-block:28px calc(28px + env(safe-area-inset-bottom,0px));margin-top:-1px}
+footer img{width:140px;margin:0 auto 10px}
+footer small{font-size:11px;letter-spacing:.14em}
+/* closing：心のなかへ入っていく */
+@media (max-width:820px){.closing{margin-top:150px!important}}
+.closing{position:relative;background:radial-gradient(120% 70% at 50% 30%,#2B2F82 0%,#191C5D 60%);color:#EDEBFF;margin-top:clamp(40px,6vw,80px)}
+.closing-edge{position:absolute;left:0;right:0;top:-89px;width:100%;height:90px;display:block}
+.closing-in{padding-block:clamp(40px,6vw,80px) clamp(80px,10vw,140px);display:grid;justify-items:center;gap:clamp(36px,5vw,56px)}
+.heart{position:relative;width:min(460px,86vw);aspect-ratio:1;transform:scale(var(--k,1));transition:transform .2s linear}
+.heart .ripple{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(255,255,255,.18);animation:ripple 6s ease-out infinite}
+.heart .ripple:nth-child(2){animation-delay:2s}.heart .ripple:nth-child(3){animation-delay:4s}
+@keyframes ripple{0%{transform:scale(.35);opacity:0}25%{opacity:1}100%{transform:scale(1.05);opacity:0}}
+.yohaku{position:absolute;inset:22%;border-radius:50%;border:2px dashed rgba(255,218,77,.75);background:radial-gradient(closest-side,rgba(255,250,220,.95) 0 55%,rgba(255,250,220,.15) 100%);box-shadow:0 0 60px rgba(255,230,140,.35)}
+.yohaku span{position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);font-family:var(--f-en);font-weight:700;font-size:12px;letter-spacing:.24em;color:#FFDA4D}
+.c-pero{position:absolute;left:50%;top:50%;height:30%;width:auto;transform:translate(-50%,-50%)}
+.c-emos span{position:absolute;width:11%;aspect-ratio:1;display:grid;place-items:center;transform:translate(-50%,-50%);transition:left .6s ease,top .6s ease}
+.c-emos img{max-width:100%;max-height:100%;width:auto;opacity:.9;animation:drift 5s ease-in-out infinite}
+@keyframes drift{50%{transform:translateY(-6px)}}
+.closing-txt{display:grid;justify-items:center;text-align:center;gap:0}
+.closing .en{font-family:var(--f-en);font-weight:700;letter-spacing:.1em;font-size:clamp(28px,3.6vw,44px);color:#FFDA4D;line-height:1;margin-right:-.1em}
+.closing h2{color:#fff;font-size:clamp(20px,2.4vw,28px);margin-top:12px}
+.closing .quote{color:#fff;font-size:clamp(22px,3vw,36px);line-height:1.8;margin-top:clamp(36px,5vw,56px);display:grid}
+.closing .quote span{opacity:.25;transform:translateY(8px);transition:opacity 1s ease,transform 1s ease}
+.closing .quote.lit span{opacity:1;transform:none}
+.closing .quote.lit span:nth-child(2){transition-delay:.5s}.closing .quote.lit span:nth-child(3){transition-delay:1s}
+.closing .body{color:rgba(237,235,255,.8);line-height:2.1;margin-top:28px;font-size:clamp(14px,1.15vw,16px)}
+.closing .btns{margin-top:clamp(40px,5vw,56px)}
+.btn.light{background:#FFDA4D;color:var(--navy)}
+.closing .btn.ghost{background:transparent;color:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
+.closing .note{color:rgba(237,235,255,.55);margin-top:clamp(48px,6vw,72px)}
+footer.night{background:#191C5D;color:rgba(237,235,255,.7);margin-top:0;border-top:1px solid rgba(255,255,255,.08)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="hd">
+  <div class="hd-in">
+    <a class="logo" href="./" aria-label="ぺろっぺ トップへ"><img src="img/logo.png" alt="peroppe"></a>
+    <ul class="gnav">
+      <li><a href="./#about">ABOUT</a></li>
+      <li><a href="./#character">CHARACTER</a></li>
+      <li><a href="./#book">BOOK</a></li>
+      <li><a href="./#play">PLAY</a></li>
+      <li><a href="./#goods">GOODS</a></li>
+    </ul>
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-label="メニューをひらく"><i></i></button>
+  </div>
+</header>
+<div class="sp-menu" id="spMenu" hidden>
+  <button class="close" id="menuClose" type="button" aria-label="とじる">×</button>
+  <ul>
+    <li><a href="./#about">ABOUT</a></li>
+    <li><a href="./#character">CHARACTER</a></li>
+    <li><a href="./#book">BOOK</a></li>
+    <li><a href="./#play">PLAY</a></li>
+    <li><a href="./#goods">GOODS</a></li>
+    <li><a href="./#sns">SNS</a></li>
+  </ul>
+</div>
+
+<main>
+<section class="hero">
+  <div class="sky" aria-hidden="true"></div>
+  <div class="wrap hero-in">
+    <span class="eyebrow">EMOTIONS</span>
+    <h1>感情は、<br>あなた そのものじゃない。</h1>
+    <p class="lead">ぺろっぺの世界では、<br>「自分」と「感情」を<br>べつべつの生きものとして描いています。</p>
+    <div class="orbit" aria-label="真ん中に静かに立つぺろっぺと、そのまわりをめぐる8つの感情">
+      <div class="halo"></div>
+      <div class="ring" id="ring"></div>
+      <img class="me" src="img/pero.png" alt="">
+      <span class="me-label">本来の自分</span>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sh">
+      <span class="en">MAP</span>
+      <h2>あなたの心のなかを、<br>見えるようにすると</h2>
+      <p>心のなかで起きていることは、<br>目には見えません。<br>ぺろっぺの世界は、それをキャラクターに置きかえて、<br>そっと見えるようにしたものです。</p>
+    </div>
+    <div class="map">
+      <div class="side">
+        <div class="pic"><div class="person" id="person"></div></div>
+        <h3>あなたの心のなか</h3>
+        <p>自分のなかで、いろんな感情が<br>わいては消えていく。</p>
+      </div>
+      <div class="mid" aria-hidden="true">→</div>
+      <div class="side">
+        <div class="pic" id="mini"><img src="img/pero.png" alt="" style="height:86px;width:auto;position:relative;z-index:1"></div>
+        <h3>ぺろっぺの世界</h3>
+        <p>静かなぺろっぺのまわりに、<br>感情たちがやってきては<br>去っていく。</p>
+      </div>
+    </div>
+    <div class="rows">
+      <div class="row"><span>本来の自分</span><span class="ar">→</span><b>ぺろっぺ</b></div>
+      <div class="row"><span>わきあがる感情</span><span class="ar">→</span><b>感情たち<small>べつの生きもの</small></b></div>
+      <div class="row"><span>感情に気づくこと</span><span class="ar">→</span><b>感情たちとの出会い</b></div>
+      <div class="row"><span>感情と自分のあいだのすきま</span><span class="ar">→</span><b>余白</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sh">
+      <span class="en">MEET</span>
+      <h2>感情との出会いかた</h2>
+    </div>
+    <div class="steps">
+      <article class="step">
+        <span class="no">1</span>
+        <div class="pic"><img src="img/emo-anger.png" alt="" style="height:96px;width:auto"></div>
+        <h3>感情が、やってくる</h3>
+        <p>うれしいことや、<br>いやなことがあると、<br>感情は向こうからやってきます。</p>
+      </article>
+      <article class="step">
+        <span class="no">2</span>
+        <div class="pic"><img class="pair" src="img/meet-pair.png" alt="" style="width:204px"></div>
+        <h3>感情と、出会う</h3>
+        <p>感情は話しかけ、<br>ぶつかってきます。<br>それを感じるのは、自然なことです。</p>
+      </article>
+      <article class="step">
+        <span class="no">3</span>
+        <div class="pic"><img class="pair" src="img/walk-pair.png" alt="" style="width:115px"></div>
+        <h3>ぺろっぺは、また進む</h3>
+        <p>感情にのみこまれず、<br>ぺろっぺは静かに、<br>自分の道を進みます。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="wheel">
+  <div class="wrap">
+    <div class="sh">
+      <span class="en">WHEEL</span>
+      <h2>プルチックの感情の輪</h2>
+      <p>心理学者ロバート・プルチックは、<br>人の基本的な感情を8つにまとめ、<br>輪のように並べました。<br>ぺろっぺの世界の感情たちは、<br>この8つがもとになっています。</p>
+      <p class="tap-hint">輪の中の感情をえらぶと、くわしい説明が見られます。</p>
+    </div>
+    <div class="wheel-wrap">
+      <div class="wheel" id="wheel">
+        <svg viewBox="-200 -200 400 400" id="wheelSvg" role="group" aria-label="感情の輪。花びらを選ぶと説明が出ます"></svg>
+        <span class="core-glow" aria-hidden="true"></span>
+        <img class="core" src="img/pero.png" alt="">
+      </div>
+      <div class="card" aria-live="polite" id="card">
+        <img class="sil" id="cSil" src="img/emo-joy.png" alt="">
+        <h3 id="cName">喜び<small>JOY</small></h3>
+        <div class="levels" id="cLv"></div>
+        <p class="role" id="cRole"></p>
+        <div class="rel">
+          <div class="rel-box"><span class="rel-lbl">反対がわの感情</span><div id="cOpp" class="opp"></div></div>
+          <div class="rel-box"><span class="rel-lbl">となりと まざると</span><div id="cMix" class="mix"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="closing" id="margin">
+  <svg class="closing-edge" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path d="M0,90 C240,10 480,0 720,0 C960,0 1200,10 1440,90 Z" fill="#191C5D"/></svg>
+  <div class="closing-in">
+    <div class="heart" id="heart" aria-hidden="true">
+      <i class="ripple"></i><i class="ripple"></i><i class="ripple"></i>
+      <div class="yohaku"><span>よはく</span></div>
+      <img class="c-pero" src="img/pero.png" alt="">
+      <div class="c-emos" id="cEmos"></div>
+    </div>
+    <div class="wrap closing-txt">
+      <span class="en">MARGIN</span>
+      <h2>感情と自分のあいだの、余白</h2>
+      <p class="quote" id="cQuote"><span>感情は、自分そのものじゃない。</span><span>でも、感情があるから、</span><span>自分を知っていける。</span></p>
+      <p class="body">悲しいとき、悲しみは「あなた」ではなく、<br>あなたのところへ来た感情です。</p>
+      <p class="body">感じることと、自分であることのあいだには、<br>ほんの少しの余白があります。<br>ぺろっぺの旅は、<br>その余白を思い出させてくれる物語です。</p>
+      <div class="btns">
+        <a class="btn light" href="./#character">ぺろっぺに会いにいく</a>
+        <a class="btn ghost" href="./#play">あそびばへ</a>
+      </div>
+      <p class="note">※ 感情の輪は、R. プルチックの「感情の輪」（1980）をもとに、ぺろっぺの世界向けにやさしく言いかえたものです。<br>並び順はぺろっぺのイラストに合わせています（原典では「驚き」と「期待」の位置が入れかわります）。</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="night"><img src="img/logo-w.png" alt="peroppe"><small>© peroppe</small></footer>
+
+<script>
+(() => {
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* ページを開いたら、かならず一番上から */
+try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch(e){}
+const toTop = () => { if (!location.hash) { window.scrollTo({ top: 0, left: 0, behavior: "instant" }); document.documentElement.scrollTop = 0; document.body.scrollTop = 0; } };
+toTop(); addEventListener("load", toTop); addEventListener("pageshow", toTop); [60, 250, 600].forEach(t => setTimeout(toTop, t));
+/* イラストと同じ並び（時計回り）：喜び・信頼・恐れ・期待・悲しみ・嫌悪・怒り・驚き */
+const EMO = [
+  {k:"joy", ja:"喜び", en:"JOY", c:"#FFDA4D", lv:["平穏","喜び","恍惚"], role:"大切なものを手に入れたときにやってくる感情。「これをもっと」と、心を前に向けてくれます。"},
+  {k:"trust", ja:"信頼", en:"TRUST", c:"#8CD15C", lv:["容認","信頼","敬愛"], role:"だれかや何かと、つながりたいときの感情。安心して、身をあずけられるようにしてくれます。"},
+  {k:"fear", ja:"恐れ", en:"FEAR", c:"#6CBD54", lv:["不安","恐れ","恐怖"], role:"危ないものに気づいたときの感情。立ち止まって、自分を守ろうとしてくれます。"},
+  {k:"anticipation", ja:"期待", en:"ANTICIPATION", c:"#2BBBED", lv:["関心","期待","警戒"], role:"これから起きることに向かう感情。先を見て、準備をさせてくれます。"},
+  {k:"sadness", ja:"悲しみ", en:"SADNESS", c:"#3D85CD", lv:["哀愁","悲しみ","悲嘆"], role:"大切なものを失ったときの感情。ゆっくり立ち止まり、それが大切だったと教えてくれます。"},
+  {k:"disgust", ja:"嫌悪", en:"DISGUST", c:"#D2A3F3", lv:["退屈","嫌悪","強い嫌悪"], role:"合わないものに出会ったときの感情。自分に必要ないものから、距離をとらせてくれます。"},
+  {k:"anger", ja:"怒り", en:"ANGER", c:"#FF625B", lv:["苛立ち","怒り","激怒"], role:"大切なものや境界がおびやかされたときの感情。自分を守るための力をくれます。"},
+  {k:"surprise", ja:"驚き", en:"SURPRISE", c:"#F88252", lv:["放心","驚き","驚嘆"], role:"思ってもみないことが起きたときの感情。いま起きていることに、目を向けさせてくれます。"}
+];
+/* となり同士がまざると（プルチックの一次の混合） */
+const DYAD = { "joy+trust":"愛", "fear+trust":"服従", "fear+surprise":"畏怖", "sadness+surprise":"拒絶", "disgust+sadness":"後悔", "anger+disgust":"軽蔑", "anger+anticipation":"攻撃性", "anticipation+joy":"楽観",
+  "fear+joy":"罪悪感", "surprise+trust":"好奇心", "fear+sadness":"絶望", "disgust+surprise":"不信", "anger+sadness":"羨望", "anticipation+disgust":"皮肉", "anger+joy":"誇り", "anticipation+trust":"希望",
+  "joy+surprise":"歓喜", "sadness+trust":"感傷", "disgust+fear":"恥", "anger+surprise":"憤慨", "anticipation+sadness":"悲観", "disgust+joy":"ねじれた喜び", "anger+trust":"優越", "anticipation+fear":"不安" };
+const mixOf = (a, b) => DYAD[[a.k, b.k].sort().join("+")] || "？";
+
+/* メニュー（トップと同じ） */
+document.querySelectorAll(".gnav a").forEach(a => { a.innerHTML = [...a.textContent].map(c => `<span>${c}</span>`).join(""); });
+const spMenu = document.getElementById("spMenu"), menuBtn = document.getElementById("menuBtn");
+const setMenu = on => { spMenu.hidden = !on; menuBtn.setAttribute("aria-expanded", on); document.body.style.overflow = on ? "hidden" : ""; };
+menuBtn.addEventListener("click", () => setMenu(true));
+document.getElementById("menuClose").addEventListener("click", () => setMenu(false));
+
+/* 日本語の改行を文節で */
+if (customElements.get("budoux-ja")) document.querySelectorAll("main p:not(.quote), main h3").forEach(el => { el.innerHTML = `<budoux-ja>${el.innerHTML}</budoux-ja>`; });
+
+/* ヒーロー：ぺろっぺのまわりをめぐる感情たち */
+const ring = document.getElementById("ring");
+EMO.forEach((e,i) => { const a = (i/8)*Math.PI*2 - Math.PI/2, box = document.createElement("span");
+  box.style.left = (50 + Math.cos(a)*43) + "%"; box.style.top = (50 + Math.sin(a)*43) + "%"; box.innerHTML = `<img src="img/emo-${e.k}.png" alt="">`; ring.appendChild(box); });
+
+/* 心のなか（人のシルエットの中で感情がわく） */
+const person = document.getElementById("person");
+EMO.forEach((e,i) => { const b = document.createElement("i"); b.className = "blob"; b.style.background = e.c;
+  b.style.left = (18 + (i%4)*18) + "px"; b.style.top = (66 + Math.floor(i/4)*30 + (i%2)*8) + "px"; b.style.animationDelay = (i*.35) + "s"; person.appendChild(b); });
+const mini = document.getElementById("mini");
+EMO.forEach((e,i) => { const a = (i/8)*Math.PI*2 - Math.PI/2, b = document.createElement("i"); b.className = "blob";
+  b.style.cssText = `background:${e.c};width:18px;height:18px;left:calc(50% + ${(Math.cos(a)*92).toFixed(1)}px - 9px);top:calc(50% + ${(Math.sin(a)*72).toFixed(1)}px - 9px);animation-delay:${i*.35}s`; mini.appendChild(b); });
+
+/* 感情の輪（SVG）：外側が弱い、内側が強い */
+const svg = document.getElementById("wheelSvg"), NS = "http://www.w3.org/2000/svg", wheel = document.getElementById("wheel");
+const arc = (r0, r1, a0, a1) => { const p = (r,a) => `${(Math.cos(a)*r).toFixed(2)},${(Math.sin(a)*r).toFixed(2)}`;
+  return r0 === 0 ? `M0,0 L${p(r1,a0)} A${r1},${r1} 0 0 1 ${p(r1,a1)}Z` : `M${p(r0,a0)} L${p(r1,a0)} A${r1},${r1} 0 0 1 ${p(r1,a1)} L${p(r0,a1)} A${r0},${r0} 0 0 0 ${p(r0,a0)}Z`; };
+const mixHex = (h, t) => { const n = parseInt(h.slice(1),16), r = n>>16, g = n>>8&255, b = n&255, m = v => Math.round(v + (255-v)*t); return `rgb(${m(r)},${m(g)},${m(b)})`; };
+EMO.forEach((e,i) => {
+  const a0 = (i/8)*Math.PI*2 - Math.PI/2 - Math.PI/8, a1 = a0 + Math.PI/4;
+  const gEl = document.createElementNS(NS,"g"); gEl.setAttribute("class","petal"); gEl.setAttribute("tabindex","0"); gEl.setAttribute("role","button"); gEl.setAttribute("aria-label", e.ja);
+  gEl.style.transformOrigin = "0 0";
+  [[0,118,.25],[118,190,.7]].forEach(([r0,r1,t]) => { const pth = document.createElementNS(NS,"path"); pth.setAttribute("d", arc(r0,r1,a0,a1)); pth.setAttribute("fill", mixHex(e.c, t)); gEl.appendChild(pth); });
+  const mid = (a0+a1)/2, im = document.createElementNS(NS,"image"), sz = 40;
+  im.setAttribute("href", `img/emo-${e.k}.png`); im.setAttribute("width", sz); im.setAttribute("height", sz);
+  im.setAttribute("x", Math.cos(mid)*155 - sz/2); im.setAttribute("y", Math.sin(mid)*155 - sz/2);
+  im.style.transformOrigin = `${Math.cos(mid)*155}px ${Math.sin(mid)*155}px`; im.style.transformBox = "view-box";
+  gEl.appendChild(im);
+  const tx = document.createElementNS(NS,"text"); tx.setAttribute("x", Math.cos(mid)*88); tx.setAttribute("y", Math.sin(mid)*88 + 5); tx.setAttribute("text-anchor","middle");
+  tx.setAttribute("font-size","14"); tx.setAttribute("font-weight","900"); tx.setAttribute("fill","#191C5D"); tx.setAttribute("font-family","Zen Maru Gothic, sans-serif"); tx.textContent = e.ja; gEl.appendChild(tx);
+  gEl.addEventListener("click", () => pick(i));
+  gEl.addEventListener("keydown", ev => { if (ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); pick(i); } });
+  svg.appendChild(gEl);
+});
+const $ = id => document.getElementById(id);
+function pick(i, quiet){
+  if (!quiet) current = i;
+  const e = EMO[i], opp = EMO[(i+4)%8], prev = EMO[(i+7)%8], next = EMO[(i+1)%8];
+  wheel.classList.add("picked"); svg.querySelectorAll(".petal").forEach((p,j) => p.classList.toggle("on", j===i));
+  $("cSil").src = `img/emo-${e.k}.png`; $("cName").innerHTML = `${e.ja}<small>${e.en}</small>`;
+  $("cLv").innerHTML = e.lv.map((l,j) => `<span style="background:${mixHex(e.c, [.75,.45,.15][j])}">${l}</span>`).join("<i>→</i>");
+  $("cRole").textContent = e.role;
+  const chip = x => `<span class="chip" style="box-shadow:inset 0 0 0 2px ${x.c}"><img src="img/emo-${x.k}.png" alt="">${x.ja}</span>`;
+  $("cOpp").innerHTML = chip(opp);
+  $("cMix").innerHTML = [[prev, mixOf(e, prev)], [next, mixOf(e, next)]].map(([o, m]) => `<div class="eq">${chip(e)}<span>+</span>${chip(o)}<span>=</span><span class="res">${m}</span></div>`).join("");
+  svg.querySelectorAll(".petal").forEach((p,j) => { const mid = (j/8)*Math.PI*2 - Math.PI/2; p.style.transform = j===i ? `translate(${(Math.cos(mid)*10).toFixed(1)}px,${(Math.sin(mid)*10).toFixed(1)}px)` : ""; });
+  if (!quiet) $("cSil").animate?.([{transform:"scale(.8) rotate(-6deg)"},{transform:"scale(1.08) rotate(4deg)"},{transform:"none"}],{duration: reduce ? 1 : 450});
+}
+/* 説明の長さで高さが変わって下のセクションが動かないよう、いちばん高いときの高さに固定する */
+const cardEl = document.getElementById("card");
+let current = 0;
+function lockCardHeight(){
+  cardEl.style.minHeight = "";
+  let max = 0;
+  EMO.forEach((_, j) => { pick(j, true); max = Math.max(max, cardEl.offsetHeight); });
+  cardEl.style.minHeight = max + "px";
+  pick(current, true);
+}
+pick(0);
+lockCardHeight();
+addEventListener("resize", () => { clearTimeout(lockCardHeight.t); lockCardHeight.t = setTimeout(lockCardHeight, 150); });
+document.fonts?.ready.then(lockCardHeight);
+
+/* closing：スクロールで心のなかへ（輪が近づき、感情たちは余白の外にとどまる） */
+const heart = document.getElementById("heart"), cEmos = document.getElementById("cEmos"), cQuote = document.getElementById("cQuote");
+const cEls = EMO.map((e,i) => { const sp = document.createElement("span"); sp.innerHTML = `<img src="img/emo-${e.k}.png" alt="" style="animation-delay:${i*.4}s">`; cEmos.appendChild(sp); return sp; });
+function closingTick(){
+  const r = heart.getBoundingClientRect(), vh = innerHeight;
+  const p = Math.max(0, Math.min(1, (vh - r.top)/(vh*.9)));          // 0 → 1：画面に入るほど近づく
+  heart.style.setProperty("--k", (reduce ? 1 : .82 + p*.18).toFixed(3));
+  const R = 47 - (reduce ? 0 : (1-p)*14);                              // 感情は外から、余白のふちまで
+  cEls.forEach((sp,i) => { const a = (i/8)*Math.PI*2 - Math.PI/2; sp.style.left = (50 + Math.cos(a)*R) + "%"; sp.style.top = (50 + Math.sin(a)*R) + "%"; });
+}
+addEventListener("scroll", closingTick, { passive: true }); closingTick();
+new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) cQuote.classList.add("lit"); }), { threshold: .6 }).observe(cQuote);
+if (reduce) cQuote.classList.add("lit");
+
+/* 草のふち */
+let r = 11, d = "M0,0 L1440,0 L1440,26", x = 1440; const rnd = () => (r = (r*9301 + 49297) % 233280) / 233280;
+while (x > 0){ const w = 26 + rnd()*34, tip = 44 + rnd()*32, lean = (rnd()-.5)*18, nx = Math.max(0, x - w), mx = (x + nx)/2 + lean;
+  d += ` Q${(x - w*.15).toFixed(1)},${(tip*.55).toFixed(1)} ${mx.toFixed(1)},${tip.toFixed(1)} Q${(nx + w*.15).toFixed(1)},${(tip*.55).toFixed(1)} ${nx.toFixed(1)},${(22 + rnd()*10).toFixed(1)}`; x = nx; }
+/* （このページのフッターは夜の色なので草は使わない） */
+})();
+</script>
+</body>
+</html>
