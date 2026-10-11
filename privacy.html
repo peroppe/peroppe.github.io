@@ -8,9 +8,24 @@
 <link rel="icon" href="img/pero.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<!-- 自分のアクセスを数えない：?notrack=1 で開くと、そのブラウザでは計測しない（?notrack=0 で元に戻す） -->
+<script>
+var NOTRACK = (function(){ try {
+  var q = new URLSearchParams(location.search).get("notrack");
+  if (q === "1") localStorage.setItem("peroppe-notrack", "1");
+  if (q === "0") localStorage.removeItem("peroppe-notrack");
+  if (q === "1" || q === "0") addEventListener("DOMContentLoaded", function(){
+    var t = document.createElement("div"); t.textContent = q === "1" ? "このブラウザでは アクセスを数えません" : "このブラウザでも アクセスを数えます";
+    t.style.cssText = "position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9999;background:#191C5D;color:#fff;padding:10px 20px;border-radius:99px;font:700 14px sans-serif";
+    document.body.appendChild(t); setTimeout(function(){ t.remove(); }, 4000);
+  });
+  return localStorage.getItem("peroppe-notrack") === "1";
+} catch(e){ return false; } })();
+if (NOTRACK) window["ga-disable-G-0GWECJR9BN"] = true;
+</script>
 <!-- アクセス解析（Microsoft Clarity：ヒートマップ） -->
 <script>
-(function(c,l,a,r,i,t,y){
+if (!NOTRACK) (function(c,l,a,r,i,t,y){
   c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
   t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
   y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
