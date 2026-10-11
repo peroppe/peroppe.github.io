@@ -345,7 +345,7 @@ footer.night{background:#191C5D;color:rgba(237,235,255,.7);margin-top:0;border-t
         <a class="btn light" href="./#character">ぺろっぺに会いにいく</a>
         <a class="btn ghost" href="./#play">あそびばへ</a>
       </div>
-      <p class="note">※ 感情の輪は、R. プルチックの「感情の輪」（1980）をもとに、ぺろっぺの世界向けにやさしく言いかえたものです。<br>並び順はぺろっぺのイラストに合わせています（原典では「驚き」と「期待」の位置が入れかわります）。</p>
+      <p class="note">※ 感情の輪は、R. プルチックの「感情の輪」（1980）をもとに、ぺろっぺの世界向けにやさしく言いかえたものです。</p>
     </div>
   </div>
 </section>
@@ -360,16 +360,16 @@ const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch(e){}
 const toTop = () => { if (!location.hash) { window.scrollTo({ top: 0, left: 0, behavior: "instant" }); document.documentElement.scrollTop = 0; document.body.scrollTop = 0; } };
 toTop(); addEventListener("load", toTop); addEventListener("pageshow", toTop); [60, 250, 600].forEach(t => setTimeout(toTop, t));
-/* イラストと同じ並び（時計回り）：喜び・信頼・恐れ・期待・悲しみ・嫌悪・怒り・驚き */
+/* イラストと同じ並び（時計回り）：喜び・信頼・恐れ・驚き・悲しみ・嫌悪・怒り・期待 */
 const EMO = [
   {k:"joy", ja:"喜び", en:"JOY", c:"#FFDA4D", lv:["平穏","喜び","恍惚"], role:"大切なものを手に入れたときにやってくる感情。「これをもっと」と、心を前に向けてくれます。"},
   {k:"trust", ja:"信頼", en:"TRUST", c:"#8CD15C", lv:["容認","信頼","敬愛"], role:"だれかや何かと、つながりたいときの感情。安心して、身をあずけられるようにしてくれます。"},
   {k:"fear", ja:"恐れ", en:"FEAR", c:"#6CBD54", lv:["不安","恐れ","恐怖"], role:"危ないものに気づいたときの感情。立ち止まって、自分を守ろうとしてくれます。"},
-  {k:"anticipation", ja:"期待", en:"ANTICIPATION", c:"#2BBBED", lv:["関心","期待","警戒"], role:"これから起きることに向かう感情。先を見て、準備をさせてくれます。"},
+  {k:"surprise", ja:"驚き", en:"SURPRISE", c:"#2BBBED", lv:["放心","驚き","驚嘆"], role:"思ってもみないことが起きたときの感情。いま起きていることに、目を向けさせてくれます。"},
   {k:"sadness", ja:"悲しみ", en:"SADNESS", c:"#3D85CD", lv:["哀愁","悲しみ","悲嘆"], role:"大切なものを失ったときの感情。ゆっくり立ち止まり、それが大切だったと教えてくれます。"},
   {k:"disgust", ja:"嫌悪", en:"DISGUST", c:"#D2A3F3", lv:["退屈","嫌悪","強い嫌悪"], role:"合わないものに出会ったときの感情。自分に必要ないものから、距離をとらせてくれます。"},
   {k:"anger", ja:"怒り", en:"ANGER", c:"#FF625B", lv:["苛立ち","怒り","激怒"], role:"大切なものや境界がおびやかされたときの感情。自分を守るための力をくれます。"},
-  {k:"surprise", ja:"驚き", en:"SURPRISE", c:"#F88252", lv:["放心","驚き","驚嘆"], role:"思ってもみないことが起きたときの感情。いま起きていることに、目を向けさせてくれます。"}
+  {k:"anticipation", ja:"期待", en:"ANTICIPATION", c:"#F88252", lv:["関心","期待","警戒"], role:"これから起きることに向かう感情。先を見て、準備をさせてくれます。"}
 ];
 /* となり同士がまざると（プルチックの一次の混合） */
 const DYAD = { "joy+trust":"愛", "fear+trust":"服従", "fear+surprise":"畏怖", "sadness+surprise":"拒絶", "disgust+sadness":"後悔", "anger+disgust":"軽蔑", "anger+anticipation":"攻撃性", "anticipation+joy":"楽観",

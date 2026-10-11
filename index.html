@@ -175,7 +175,7 @@ main,header,footer{position:relative;z-index:1}
 .emo-panel h3{font-size:clamp(20px,2.2vw,26px);font-weight:900;color:var(--navy)}
 .emo-row{display:grid;grid-template-columns:repeat(8,1fr);gap:clamp(6px,1.4vw,18px);width:100%;align-items:end}
 .emo-row figure{margin:0;display:grid;justify-items:center;gap:6px}
-.emo-row img{height:clamp(44px,6vw,80px);width:auto;opacity:.55;filter:saturate(.7)}
+.emo-row img{height:clamp(44px,6vw,80px);width:auto;filter:brightness(0) invert(.72)}
 .emo-row figcaption{font-size:12px;font-weight:700;color:#6B6B6B}
 .emo-more{position:relative;z-index:3;margin-top:4px}
 .emo-panel .lbl{position:relative;inset:auto;font-size:clamp(20px,2.6vw,32px)}
@@ -540,11 +540,11 @@ const EMO = [
   {k:"joy",ja:"喜び",c:"#FFDA4D",say:"♪"},
   {k:"trust",ja:"信頼",c:"#8CD15C",say:"…ね"},
   {k:"fear",ja:"恐れ",c:"#6CBD54",say:"ひっ"},
-  {k:"anticipation",ja:"期待",c:"#2BBBED",say:"まだ？"},
+  {k:"surprise",ja:"驚き",c:"#2BBBED",say:"！？"},
   {k:"sadness",ja:"悲しみ",c:"#3D85CD",say:"…"},
   {k:"disgust",ja:"嫌悪",c:"#D2A3F3",say:"うぇ"},
   {k:"anger",ja:"怒り",c:"#FF625B",say:"ムッ"},
-  {k:"surprise",ja:"驚き",c:"#F88252",say:"！？"}
+  {k:"anticipation",ja:"期待",c:"#F88252",say:"まだ？"}
 ];
 
 /* ---------- opening ---------- */
@@ -613,7 +613,7 @@ function fvTick(){ if (reduce) return; cx += (mx-cx)*.05; cy += (my-cy)*.05; fvP
 
 /* ---------- emotion row (coming soon) ---------- */
 const emoRow = document.getElementById("emoRow");
-EMO.forEach(e => { const f = document.createElement("figure"); f.innerHTML = `<img src="img/emo-${e.k}.png" alt="${e.ja}の感情のシルエット"><figcaption>${e.ja}</figcaption>`; emoRow.appendChild(f); });
+EMO.forEach(e => { const f = document.createElement("figure"); f.innerHTML = `<img src="img/emo-${e.k}.png" alt="感情のシルエット">`; emoRow.appendChild(f); });
 
 /* ---------- grass edges ---------- */
 function grassPath(seed){
