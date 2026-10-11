@@ -2,6 +2,34 @@
 <meta property="og:title" content="ぺろっぺ peroppe"><meta property="og:description" content="あなたの心のなかにいる、もうひとりの自分。ぺろっぺの公式サイト。"><meta property="og:type" content="website"><meta property="og:image" content="img/pero-balloon.png">
 <link rel="icon" href="img/pero.png"><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>ぺろっぺ</title>
+<!-- アクセス解析（Microsoft Clarity：ヒートマップ） -->
+<script>
+(function(c,l,a,r,i,t,y){
+  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "yvxoodx0e0");
+</script>
+<!-- アクセス解析（Google アナリティクス 4）。くわしくは privacy.html -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0GWECJR9BN"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag("js", new Date()); gtag("config", "G-0GWECJR9BN");
+/* 計測イベントを送る（計測が読み込めなくてもサイトは止まらない） */
+function track(name, params){ try { gtag("event", name, params || {}); } catch(e){} try { clarity("event", name); } catch(e){} }
+/* どのセクションまで見たか（画面のまん中まで来たら1回だけ） */
+addEventListener("DOMContentLoaded", () => {
+  if (!("IntersectionObserver" in window)) return;
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ track("section_view", {section: e.target.id, page: location.pathname}); io.unobserve(e.target); } }), {rootMargin: "0px 0px -50% 0px"});
+  document.querySelectorAll("section[id]").forEach(s => io.observe(s));
+});
+/* グッズ・SNS へのリンク */
+document.addEventListener("click", e => {
+  const a = e.target.closest && e.target.closest("a[href^='http']"); if (!a || a.host === location.host) return;
+  track("link_click", {link_url: a.href, link_type: a.host.includes("base.shop") ? "goods" : /instagram|x\.com/.test(a.host) ? "sns" : "other"});
+});
+</script>
 <script src="https://cdn.jsdelivr.net/npm/budoux@0.9.3/bundle/budoux-ja.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -522,7 +550,7 @@ footer small{font-size:11px;letter-spacing:.14em;opacity:.7}
 <footer>
   <div class="walk" aria-hidden="true"><div><img src="img/goma-walk.png" alt="" style="height:40px"><img src="img/pero-walk.png" alt="" style="height:84px"></div></div>
   <img class="flogo" src="img/logo.png" alt="peroppe">
-  <small>© peroppe</small>
+  <small>© peroppe　<a href="privacy.html" style="color:inherit">プライバシーポリシー</a></small>
 </footer>
 
 <div class="modal" id="modal" hidden>
@@ -691,13 +719,16 @@ function tone(f0, f1, dur, type="sine", vol=.25, delay=0){
 function squishSound(){ tone(520, 170, .2, "sine", .3); tone(260, 120, .16, "triangle", .12, .02); }
 function boingSound(){ tone(180, 620, .12, "sine", .22); tone(620, 380, .22, "sine", .12, .1); }
 function pip(){ tone(880, 1200, .07, "square", .05); }
+let gameKind = "", gameAt = 0;
 function openGame(kind){
+  gameKind = kind; gameAt = performance.now(); track("game_open", {game: kind});
   modal.hidden = false; document.body.classList.add("lock");
   cancelAnimationFrame(raf); PAD.dir = 0; setPad(null); setHelp("", ""); setBtns([]);
   game = kind === "squish" ? Squish() : kind === "kart" ? Kart() : kind === "catch" ? Catch() : kind === "jump" ? Jump() : kind === "kisekae" ? Kisekae() : Fuku();
   const step = t => { game.draw(t); raf = requestAnimationFrame(step); }; raf = requestAnimationFrame(step);
 }
-function closeGame(){ modal.hidden = true; document.body.classList.remove("lock"); cancelAnimationFrame(raf); game?.stop?.(); game = null; }
+function closeGame(){ if (gameKind){ track("game_close", {game: gameKind, seconds: Math.round((performance.now() - gameAt)/1000)}); gameKind = ""; }
+  modal.hidden = true; document.body.classList.remove("lock"); cancelAnimationFrame(raf); game?.stop?.(); game = null; }
 document.querySelectorAll(".game[data-game]").forEach(b => b.addEventListener("click", () => openGame(b.dataset.game)));
 /* ゲームは最初の3つだけ見せて、のこりは「もっと見る」で */
 const gamesEl = document.getElementById("games"), moreBtn = document.getElementById("moreGames");
@@ -808,7 +839,7 @@ function Fuku(){
     done = true; let err = 0;
     placed.forEach(p => { const m = META[p.k]; err += Math.hypot(p.x - (fx + m.x*W0), p.y - (fy + m.y*H0)); }); err /= placed.length;
     const s = Math.max(0, Math.round(100 - err/2));
-    gInfo.textContent = `${s >= 85 ? "ぴったり！" : s >= 60 ? "おしい！" : "ふくわらい！"}（${s}てん）`;
+    gInfo.textContent = `${s >= 85 ? "ぴったり！" : s >= 60 ? "おしい！" : "ふくわらい！"}（${s}てん）`; track("game_result", {game: "fuku", score: s});
     tone(660, 990, .12, "sine", .2); tone(990, 1320, .18, "sine", .16, .12);
     setBtns([["もういちど", reset], ["こたえを みる", () => { showAns = !showAns; }, true]]);
   }
@@ -895,7 +926,7 @@ function Kisekae(){
     done = true; let err = 0;
     placed.forEach(p => { const t = target(p.it); err += Math.hypot(p.x - t.x, p.y - t.y); }); err /= placed.length;
     const s = Math.max(0, Math.round(100 - err/2));
-    gInfo.textContent = `${theme.name}コーデ ${s >= 85 ? theme.good : s >= 60 ? "おしい！" : "へんてこ コーデ！"}（${s}てん）`;
+    gInfo.textContent = `${theme.name}コーデ ${s >= 85 ? theme.good : s >= 60 ? "おしい！" : "へんてこ コーデ！"}（${s}てん）`; track("game_result", {game: "kisekae", theme: theme.name, score: s});
     tone(660, 990, .12, "sine", .2); tone(990, 1320, .18, "sine", .16, .12);
     setBtns([["ほかの テーマで もういちど", reset], ["こたえを みる", () => { showAns = !showAns; }, true]]);
   }
@@ -1057,7 +1088,7 @@ function Jump(){
   function gameOver(){
     state.over = true; setPad(null);
     if (state.score > state.high){ state.high = state.score; try { localStorage.setItem(HS_KEY, state.high); } catch(e){} state.newRecord = true; }
-    gInfo.textContent = `スコア ${state.score}てん（ハイスコア ${state.high}てん）`;
+    gInfo.textContent = `スコア ${state.score}てん（ハイスコア ${state.high}てん）`; track("game_result", {game: "jump", score: state.score});
     setBtns([["リトライ", newGame]]);
   }
 
@@ -1246,7 +1277,7 @@ function Catch(){
   function gameOver(){
     state.over = true;
     if (state.score > state.high){ state.high = state.score; try { localStorage.setItem(HS_KEY, state.high); } catch(e){} state.newRecord = true; }
-    gInfo.textContent = `スコア ${state.score}てん（ハイスコア ${state.high}てん）`;
+    gInfo.textContent = `スコア ${state.score}てん（ハイスコア ${state.high}てん）`; track("game_result", {game: "catch", score: state.score});
     setBtns([["リトライ", newGame]]); setPad(null);
   }
 
@@ -1350,7 +1381,7 @@ function Kart(){
         if (bump > 0) bump -= dt;
         speed = Math.min(speed, top);
         px = Math.max(-2, Math.min(2, px));
-        pz += speed*dt; if (pz >= TRACK){ pz -= TRACK; plap++; if (plap >= LAPS){ state = "done"; const r = place(); finishText = r === 1 ? "1い！ おめでとう！" : `${r}い でゴール！`; tone(660,990,.12,"sine",.2); tone(990,1320,.2,"sine",.16,.12); gInfo.textContent = `${finishText}　タイム ${((now-t0)/1000).toFixed(1)}びょう`; } else tone(700,900,.15,"sine",.15); }
+        pz += speed*dt; if (pz >= TRACK){ pz -= TRACK; plap++; if (plap >= LAPS){ state = "done"; const r = place(); finishText = r === 1 ? "1い！ おめでとう！" : `${r}い でゴール！`; tone(660,990,.12,"sine",.2); tone(990,1320,.2,"sine",.16,.12); gInfo.textContent = `${finishText}　タイム ${((now-t0)/1000).toFixed(1)}びょう`; track("game_result", {game: "kart", place: r, seconds: Math.round((now-t0)/1000)}); } else tone(700,900,.15,"sine",.15); }
         // ？ボックス → アイテムのルーレット
         for (const sp of seg.sprites){ if (sp.kind === "box" && !sp.taken && Math.abs(px - sp.x) < .3){ sp.taken = 6; if (!item && roulette <= 0){ roulette = 1; } tone(500,1200,.2,"sine",.16); } }
         if (roulette > 0){ roulette -= dt; if (Math.floor(roulette*12) !== Math.floor((roulette+dt)*12)) tone(900,900,.03,"square",.03); if (roulette <= 0){ item = Math.random() < .55 ? "goma" : "star"; tone(700,1100,.15,"sine",.15); } }
