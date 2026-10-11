@@ -447,6 +447,12 @@ footer small{font-size:11px;letter-spacing:.14em;opacity:.7}
         <p>おちてくる パーツを<br>タップで とめて、<br>かおを つくろう。</p>
         <span class="go">PLAY</span>
       </button>
+      <button class="game" type="button" data-game="kisekae">
+        <div class="th"><img src="img/thumb-kisekae.webp" alt="落ちてくる探偵のぼうしをタップで止めて、ぺろっぺに探偵の服を着せるところ"></div>
+        <h3>ぺろっぺ きせかえ</h3>
+        <p>たんてい、ふゆ、なつ…<br>テーマに あわせて<br>おちてくる ふくを とめよう。</p>
+        <span class="go">PLAY</span>
+      </button>
       <button class="game" type="button" data-game="kart">
         <div class="th"><img src="img/thumb-kart.webp" alt="感情たちとカートでレースしているところ"></div>
         <h3>ぺろっぺ カート</h3>
@@ -671,6 +677,8 @@ const load = src => new Promise(r => { const i = new Image(); i.onload = () => r
 const IM = {};
 Promise.all(["pero","pero-walk","pero-blank","part-eye-l","part-eye-r","part-beak","part-mouth","goma","goma-plain",...EMO.map(e => "emo-"+e.k)].map(n => load(`img/${n}.png`).then(i => IM[n] = i)));
 load("img/pero-back.webp").then(i => IM["pero-back"] = i);
+const KISE = {};
+["tshirt","inverness","duffle","aloha","tuxedo","brownbowtie","scarf","mittens","ukiwa","pochette","sunglasses","strawhat","knithat","tophat","deerstalker","beret","heartglasses","roundglasses","mustache"].forEach(n => load(`img/kise-${n}.webp`).then(i => KISE[n] = i));
 
 function audio(){ if (!AC){ try { AC = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} } if (AC && AC.state === "suspended") AC.resume(); return AC; }
 function tone(f0, f1, dur, type="sine", vol=.25, delay=0){
@@ -686,7 +694,7 @@ function pip(){ tone(880, 1200, .07, "square", .05); }
 function openGame(kind){
   modal.hidden = false; document.body.classList.add("lock");
   cancelAnimationFrame(raf); PAD.dir = 0; setPad(null); setHelp("", ""); setBtns([]);
-  game = kind === "squish" ? Squish() : kind === "kart" ? Kart() : kind === "catch" ? Catch() : kind === "jump" ? Jump() : Fuku();
+  game = kind === "squish" ? Squish() : kind === "kart" ? Kart() : kind === "catch" ? Catch() : kind === "jump" ? Jump() : kind === "kisekae" ? Kisekae() : Fuku();
   const step = t => { game.draw(t); raf = requestAnimationFrame(step); }; raf = requestAnimationFrame(step);
 }
 function closeGame(){ modal.hidden = true; document.body.classList.remove("lock"); cancelAnimationFrame(raf); game?.stop?.(); game = null; }
@@ -809,6 +817,17 @@ function Fuku(){
   addEventListener("keydown", key);
   gc.addEventListener("pointerdown", tap); reset();
   const drawPart = (im, x, y, a=1) => { const w = im.width*sc, h = im.height*sc; g.globalAlpha = a; g.drawImage(im, x - w/2, y - h/2, w, h); g.globalAlpha = 1; };
+  // 右上の「おてほん」：このテーマを ぜんぶ ただしく着たところ
+  function sample(){
+    const cw = 132, ch = 188, cx = GW - cw - 14, cy = 14, m = 132/body.height, bw = body.width*m, bx = cx + (cw - bw)/2, by = cy + 44;
+    g.save(); g.fillStyle = "rgba(255,255,255,.92)"; g.strokeStyle = "rgba(25,28,93,.15)"; g.lineWidth = 2;
+    g.beginPath(); g.roundRect(cx, cy, cw, ch, 16); g.fill(); g.stroke();
+    g.fillStyle = "#191C5D"; g.textAlign = "center"; g.textBaseline = "middle"; g.font = '900 18px "Zen Maru Gothic", sans-serif'; g.fillText("おてほん", cx + cw/2, cy + 20);
+    g.beginPath(); g.roundRect(cx, cy, cw, ch, 16); g.clip();
+    g.drawImage(body, bx, by, bw, body.height*m);
+    [...list].sort((a, b) => a.z - b.z).forEach(it => { const w = it.w*m, h = w*it.img.height/it.img.width; g.drawImage(it.img, bx + it.x*m - w/2, by + it.y*m - h/2, w, h); });
+    g.restore();
+  }
   return {
     stop(){ gc.removeEventListener("pointerdown", tap); removeEventListener("keydown", key); },
     draw(){
@@ -818,6 +837,110 @@ function Fuku(){
       placed.forEach(p => drawPart(p.img, p.x, p.y));
       if (showAns) Object.entries(META).forEach(([k,m]) => drawPart(IM["part-"+k], fx + m.x*W0, fy + m.y*H0, .35));
       if (cur){ cur.y += cur.sp; if (cur.y > GH + 40) cur.y = -40; drawPart(cur.img, cur.x, cur.y); }
+    }
+  };
+}
+
+/* --- ぺろっぺ きせかえ: ふくわらいの、ぼうし・めがね・ふく版（テーマごとのコーデ） --- */
+function Kisekae(){
+  gTitle.textContent = "ぺろっぺ きせかえ";
+  setHelp('<kbd>クリック</kbd> か <kbd>スペース</kbd> で アイテムを とめる', 'がめんを タップして アイテムを とめる');
+  const body = IM.pero, H0 = GH*.62, sc = H0/body.height, W0 = body.width*sc, fx = GW/2 - W0/2, fy = GH*.3;
+  // アイテムの絵（img/kise-*.webp）。ぺろっぺに着せた絵から切り出したもの。
+  // x, y = ぺろっぺの画像（211×301）の上でのアイテムの中心、w = 横幅、z = 重ねる順番（大きいほど手前。てぶくろは服の下）
+  const ITEM = {
+    tshirt: {name:"ピンクの Tシャツ", x:110.1, y:207.5, w:199.1, z:0},
+    inverness: {name:"たんていの コート", x:106.0, y:217.6, w:209.1, z:0},
+    duffle: {name:"ダッフルコート", x:106.2, y:215.9, w:208.7, z:0},
+    aloha: {name:"アロハシャツ", x:107.4, y:217.2, w:206.5, z:0},
+    tuxedo: {name:"タキシード", x:107.4, y:212.3, w:203.9, z:0},
+    brownbowtie: {name:"ちゃいろの ちょうネクタイ", x:106.0, y:176.2, w:81.1, z:1},
+    scarf: {name:"マフラー", x:105.3, y:202.5, w:175.3, z:1},
+    mittens: {name:"てぶくろ", x:105.0, y:220.7, w:213.9, z:-1},
+    ukiwa: {name:"うきわ", x:106.7, y:224.0, w:192.9, z:1},
+    pochette: {name:"ポシェット", x:120.3, y:213.6, w:136.8, z:1},
+    sunglasses: {name:"サングラス", x:105.8, y:104.0, w:167.9, z:3},
+    strawhat: {name:"むぎわらぼうし", x:107.1, y:45.8, w:221.5, z:2},
+    knithat: {name:"ニットぼう", x:107.8, y:36.0, w:189.9, z:2},
+    tophat: {name:"シルクハット", x:105.5, y:17.7, w:184.0, z:2},
+    deerstalker: {name:"たんていの ぼうし", x:106.5, y:41.0, w:197.3, z:2},
+    beret: {name:"ベレーぼう", x:126.7, y:40.3, w:134.2, z:2},
+    heartglasses: {name:"ハートの めがね", x:104.9, y:102.8, w:181.2, z:3},
+    roundglasses: {name:"まるめがね", x:105.8, y:100.4, w:155.9, z:3},
+    mustache: {name:"ちょびひげ", x:106.4, y:149.3, w:56.6, z:1},
+  };
+  // テーマ：アイテムは 落ちてくる順番（下に着るものから）
+  const THEMES = [
+    {name:"たんてい", items:["inverness","brownbowtie","roundglasses","deerstalker"], good:"めいたんてい！"},
+    {name:"ふゆ", items:["mittens","duffle","scarf","knithat"], good:"ぬくぬく！"},
+    {name:"なつ", items:["aloha","ukiwa","sunglasses","strawhat"], good:"なつ まんきつ！"},
+    {name:"マジシャン", items:["tuxedo","mustache","tophat"], good:"マジック だいせいこう！"},
+    {name:"おでかけ", items:["tshirt","pochette","heartglasses","beret"], good:"おでかけ じゅんび ばっちり！"},
+  ];
+  Object.entries(ITEM).forEach(([k, it]) => { it.k = k; it.img = KISE[k]; });
+  const size = it => ({w: it.w*sc, h: it.w*sc*it.img.height/it.img.width});
+  const target = it => ({x: fx + it.x*sc, y: fy + it.y*sc}); // アイテムの中心が来るべき位置
+  let theme = Kisekae.last, list, placed, cur, showAns, done; // 前回のテーマは つづけて出さない
+  function reset(){
+    const others = THEMES.filter(t => t.name !== theme?.name); theme = Kisekae.last = others[Math.floor(Math.random()*others.length)];
+    list = theme.items.map(k => ITEM[k]); placed = []; showAns = false; done = false; next(); setBtns([["さいしょから", reset, true]]);
+  }
+  function next(){
+    const it = list[placed.length];
+    if (!it){ finish(); return; }
+    cur = {it, x:target(it).x, y:-size(it).h/2, sp: 5.4 + placed.length*1.1};
+    gInfo.textContent = `${theme.name}コーデ：${it.name}が おちてくるよ。タップで とめよう！（${placed.length+1}/${list.length}）`;
+  }
+  function finish(){
+    done = true; let err = 0;
+    placed.forEach(p => { const t = target(p.it); err += Math.hypot(p.x - t.x, p.y - t.y); }); err /= placed.length;
+    const s = Math.max(0, Math.round(100 - err/2));
+    gInfo.textContent = `${theme.name}コーデ ${s >= 85 ? theme.good : s >= 60 ? "おしい！" : "へんてこ コーデ！"}（${s}てん）`;
+    tone(660, 990, .12, "sine", .2); tone(990, 1320, .18, "sine", .16, .12);
+    setBtns([["ほかの テーマで もういちど", reset], ["こたえを みる", () => { showAns = !showAns; }, true]]);
+  }
+  const tap = e => { e.preventDefault(); audio(); if (done || !cur) return; placed.push({it:cur.it, x:cur.x, y:cur.y}); pip(); cur = null; setTimeout(next, 350); };
+  const key = e => { if (e.key === " " || e.key === "Enter"){ e.preventDefault(); tap(e); } };
+  addEventListener("keydown", key);
+  gc.addEventListener("pointerdown", tap); reset();
+  const drawItem = (it, x, y, a=1) => { const {w, h} = size(it); g.globalAlpha = a; g.drawImage(it.img, x - w/2, y - h/2, w, h); g.globalAlpha = 1; };
+  // 上の帯：テーマの名前と、このテーマのアイテム（つけたものは こく、まだのものは うすく）
+  function themeBar(){
+    g.save(); g.textAlign = "center"; g.textBaseline = "middle"; g.font = '900 28px "Zen Maru Gothic", sans-serif';
+    const label = `テーマ：${theme.name}`, lw = g.measureText(label).width + 48;
+    g.fillStyle = "#191C5D"; g.beginPath(); g.roundRect(GW/2 - lw/2, 14, lw, 44, 22); g.fill();
+    g.fillStyle = "#FFFFFF"; g.fillText(label, GW/2, 37);
+    const B = 52, gap = 12, x0 = GW/2 - (list.length*B + (list.length-1)*gap)/2;
+    list.forEach((it, i) => {
+      const bx = x0 + i*(B+gap), by = 66, on = i < placed.length, now = cur && cur.it === it;
+      g.fillStyle = "#FFFFFF"; g.strokeStyle = now ? "#F2763A" : "rgba(25,28,93,.15)"; g.lineWidth = now ? 4 : 2;
+      g.beginPath(); g.roundRect(bx, by, B, B, 14); g.fill(); g.stroke();
+      const r = Math.min((B-12)/it.img.width, (B-12)/it.img.height), w = it.img.width*r, h = it.img.height*r;
+      g.globalAlpha = on || now ? 1 : .3; g.drawImage(it.img, bx + (B-w)/2, by + (B-h)/2, w, h); g.globalAlpha = 1;
+    });
+    g.restore();
+  }
+  // 右上の「おてほん」：このテーマを ぜんぶ ただしく着たところ
+  function sample(){
+    const cw = 132, ch = 188, cx = GW - cw - 14, cy = 14, m = 132/body.height, bw = body.width*m, bx = cx + (cw - bw)/2, by = cy + 44;
+    g.save(); g.fillStyle = "rgba(255,255,255,.92)"; g.strokeStyle = "rgba(25,28,93,.15)"; g.lineWidth = 2;
+    g.beginPath(); g.roundRect(cx, cy, cw, ch, 16); g.fill(); g.stroke();
+    g.fillStyle = "#191C5D"; g.textAlign = "center"; g.textBaseline = "middle"; g.font = '900 18px "Zen Maru Gothic", sans-serif'; g.fillText("おてほん", cx + cw/2, cy + 20);
+    g.beginPath(); g.roundRect(cx, cy, cw, ch, 16); g.clip();
+    g.drawImage(body, bx, by, bw, body.height*m);
+    [...list].sort((a, b) => a.z - b.z).forEach(it => { const w = it.w*m, h = w*it.img.height/it.img.width; g.drawImage(it.img, bx + it.x*m - w/2, by + it.y*m - h/2, w, h); });
+    g.restore();
+  }
+  return {
+    stop(){ gc.removeEventListener("pointerdown", tap); removeEventListener("keydown", key); },
+    draw(){
+      floor();
+      g.fillStyle = "rgba(25,28,93,.12)"; g.beginPath(); g.ellipse(GW/2, fy+H0+4, W0*.4, 16, 0, 0, 6.28); g.fill();
+      g.drawImage(body, fx, fy, W0, H0);
+      [...placed].sort((a, b) => a.it.z - b.it.z).forEach(p => drawItem(p.it, p.x, p.y));
+      if (showAns) [...list].sort((a, b) => a.z - b.z).forEach(it => { const t = target(it); drawItem(it, t.x, t.y, .35); });
+      themeBar(); sample();
+      if (cur){ const h = size(cur.it).h/2; cur.y += cur.sp; if (cur.y > GH + h) cur.y = -h; drawItem(cur.it, cur.x, cur.y); }
     }
   };
 }
